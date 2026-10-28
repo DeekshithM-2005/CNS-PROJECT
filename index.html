@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RFC-4880 / RFC-8551 // PGP & S/MIME SIGNING WORKBENCH</title>
+  <meta name="description" content="Utilitarian cryptographic engineering workbench for RSA digital signatures, PGP cleartext, and S/MIME message verification.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Utility Header Bar -->
+  <header class="workbench-header">
+    <div class="header-left">
+      <span class="micro-label">SPECIFICATION UTILITY // CRYPTOGRAPHY &amp; NETWORK SECURITY</span>
+      <h1 class="header-title">RFC-4880 / RFC-8551 // PGP &amp; S/MIME SIGNING WORKBENCH</h1>
+    </div>
+    <div class="header-right">
+      <div class="control-unit">
+        <label for="select-preset" class="micro-label">PRESET CONFIG:</label>
+        <select id="select-preset" class="wb-select mono">
+          <option value="preset-1" selected>Preset: p=61, q=53, e=17 (Standard Demo)</option>
+          <option value="preset-2">Preset: p=101, q=103, e=7 (3-Digit Primes)</option>
+          <option value="preset-3">Preset: p=251, q=257, e=17 (Medium Scale)</option>
+        </select>
+      </div>
+      <button type="button" id="btn-reset" class="wb-btn wb-btn-subtle">Reset Workbench</button>
+    </div>
+  </header>
+
+  <!-- Main 2-Column Split-Pane Workbench -->
+  <main class="workbench-grid">
+
+    <!-- LEFT COLUMN: Configuration & Composition -->
+    <div class="pane pane-left">
+
+      <!-- SECTION 01 // RSA KEY PARAMETERS -->
+      <section class="section-block" id="sec-rsa">
+        <div class="section-header">
+          <span class="section-title">SECTION 01 // RSA KEY PARAMETERS</span>
+          <span class="status-indicator" id="key-validity-status">READY / VALID</span>
+        </div>
+        <div class="section-content">
+          <div class="input-row-3col">
+            <div class="form-unit">
+              <label for="input-p" class="micro-label">PRIME P</label>
+              <input type="number" id="input-p" class="wb-input mono" value="61" min="3">
+              <span class="validation-note" id="note-p">Status: Prime</span>
+            </div>
+            <div class="form-unit">
+              <label for="input-q" class="micro-label">PRIME Q</label>
+              <input type="number" id="input-q" class="wb-input mono" value="53" min="3">
+              <span class="validation-note" id="note-q">Status: Prime</span>
+            </div>
+            <div class="form-unit">
+              <label for="input-e" class="micro-label">PUBLIC EXPONENT E</label>
+              <input type="number" id="input-e" class="wb-input mono" value="17" min="3">
+              <span class="validation-note" id="note-e">Status: gcd(e, phi)=1</span>
+            </div>
+          </div>
+
+          <!-- Tabular Readout of Computed Keys -->
+          <table class="wb-table mono mt-10">
+            <thead>
+              <tr>
+                <th>PARAMETER</th>
+                <th>FORMULA</th>
+                <th>COMPUTED VALUE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-param">Modulus n</td>
+                <td class="col-formula">p * q</td>
+                <td class="col-val" id="val-n">3233</td>
+              </tr>
+              <tr>
+                <td class="col-param">Totient phi(n)</td>
+                <td class="col-formula">(p-1) * (q-1)</td>
+                <td class="col-val" id="val-phi">3120</td>
+              </tr>
+              <tr>
+                <td class="col-param">Public Key (e, n)</td>
+                <td class="col-formula">RFC-3447 [e, n]</td>
+                <td class="col-val" id="val-pubkey">(17, 3233)</td>
+              </tr>
+              <tr>
+                <td class="col-param">Private Key (d, n)</td>
+                <td class="col-formula">e^-1 mod phi(n)</td>
+                <td class="col-val highlight-val" id="val-privkey">(2753, 3233)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div id="key-error-bar" class="notice-bar error-notice hidden"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 02 // MIME MESSAGE COMPOSER -->
+      <section class="section-block" id="sec-composer">
+        <div class="section-header">
+          <span class="section-title">SECTION 02 // MIME MESSAGE COMPOSER</span>
+          <span class="section-meta mono" id="msg-meta-count">Body: 61 bytes</span>
+        </div>
+        <div class="section-content">
+          <div class="form-grid-2col">
+            <div class="form-unit">
+              <label for="input-from" class="micro-label">FROM:</label>
+              <input type="text" id="input-from" class="wb-input mono" value="alice@cryptovault.org">
+            </div>
+            <div class="form-unit">
+              <label for="input-to" class="micro-label">TO:</label>
+              <input type="text" id="input-to" class="wb-input mono" value="bob@secureserver.net">
+            </div>
+          </div>
+
+          <div class="form-unit mt-8">
+            <label for="input-subject" class="micro-label">SUBJECT:</label>
+            <input type="text" id="input-subject" class="wb-input mono" value="Urgent: Wire Authorization #TX-9024">
+          </div>
+
+          <div class="form-unit mt-8">
+            <div class="label-split">
+              <label for="input-body" class="micro-label">MESSAGE BODY (PAYLOAD FOR HASHING):</label>
+              <button type="button" id="btn-load-sample" class="link-btn">Load Sample Payload</button>
+            </div>
+            <textarea id="input-body" class="wb-textarea mono" rows="4">Please authorize wire transfer of $250,000 to Account #8819-2041.</textarea>
+          </div>
+
+          <div class="actions-row mt-10">
+            <button type="button" id="btn-compute-sign" class="wb-btn wb-btn-primary">
+              COMPUTE HASH &amp; GENERATE SIGNATURE
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Pipeline Trace, Raw Output & Tamper Verification -->
+    <div class="pane pane-right">
+
+      <!-- SECTION 03 // SIGNING PIPELINE TRACE -->
+      <section class="section-block" id="sec-pipeline">
+        <div class="section-header">
+          <span class="section-title">SECTION 03 // SIGNING PIPELINE TRACE</span>
+          <span class="section-meta mono">EXECUTION: SYNCHRONIZED</span>
+        </div>
+        <div class="section-content no-padding">
+          <div class="pipeline-spec-grid">
+
+            <div class="spec-cell">
+              <span class="micro-label">01 // MESSAGE DIGEST</span>
+              <div class="spec-label">SHA-256 Digest (Hex):</div>
+              <div class="spec-val-box mono" id="trace-sha256">...</div>
+              <div class="spec-sub mt-6">
+                Reduced Integer Hash: <strong class="mono" id="trace-h">H = ...</strong>
+              </div>
+            </div>
+
+            <div class="spec-cell">
+              <span class="micro-label">02 // PRIVATE KEY SIGNING</span>
+              <div class="spec-label">Modular Exponentiation:</div>
+              <div class="spec-formula-box mono" id="trace-formula">S = (H^d) mod n</div>
+              <div class="spec-sub mt-6">
+                Parameters: <span class="mono" id="trace-op-details">H^d mod n</span>
+              </div>
+            </div>
+
+            <div class="spec-cell">
+              <span class="micro-label">03 // COMPUTED SIGNATURE</span>
+              <div class="spec-label">Digital Signature (S):</div>
+              <div class="spec-val-box mono highlight-box" id="trace-s">S = ...</div>
+              <div class="spec-sub mt-6">
+                Hex: <span class="mono" id="trace-s-hex">0x...</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 04 // RAW SIGNED PAYLOAD (PGP / S/MIME) -->
+      <section class="section-block" id="sec-raw-output">
+        <div class="section-header header-with-tabs">
+          <div class="tab-group">
+            <button type="button" class="tab-item active" id="tab-pgp">[ PGP CLEARTEXT (RFC 4880) ]</button>
+            <button type="button" class="tab-item" id="tab-smime">[ S/MIME MULTIPART (RFC 8551) ]</button>
+          </div>
+          <div class="tab-actions">
+            <button type="button" id="btn-copy-payload" class="wb-btn wb-btn-subtle">Copy Raw Payload</button>
+            <button type="button" id="btn-export-file" class="wb-btn wb-btn-subtle">Export <span id="export-label">.ASC</span></button>
+          </div>
+        </div>
+        <div class="section-content no-padding">
+          <div class="code-container">
+            <pre class="wb-code-block mono" id="output-raw-payload">Generating RFC-compliant payload...</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 05 // RECEIVER VERIFICATION & TAMPER INSPECTOR -->
+      <section class="section-block" id="sec-verifier">
+        <div class="section-header">
+          <span class="section-title">SECTION 05 // RECEIVER VERIFICATION &amp; TAMPER INSPECTOR</span>
+          <div class="header-tools">
+            <button type="button" id="btn-tamper-msg" class="wb-btn wb-btn-danger">Tamper Message</button>
+            <button type="button" id="btn-tamper-sig" class="wb-btn wb-btn-danger">Tamper Signature</button>
+            <button type="button" id="btn-restore" class="wb-btn wb-btn-subtle">Restore Original</button>
+          </div>
+        </div>
+        <div class="section-content">
+
+          <!-- Strict Rectangular Status Bar -->
+          <div id="status-bar" class="rect-status-bar status-valid">
+            STATUS: VERIFIED [H_new == H'] — INTEGRITY INTACT
+          </div>
+
+          <div class="form-grid-2col mt-10">
+            <div class="form-unit">
+              <label for="inspect-body" class="micro-label">RECEIVED MESSAGE BODY (EDITABLE FOR TAMPER TESTING):</label>
+              <textarea id="inspect-body" class="wb-textarea mono" rows="3"></textarea>
+            </div>
+            <div class="form-unit">
+              <label for="inspect-sig" class="micro-label">RECEIVED SIGNATURE INTEGER S (EDITABLE):</label>
+              <input type="number" id="inspect-sig" class="wb-input mono">
+              <div class="helper-text mt-4">
+                Decryption Key: Sender Public Key <strong class="mono" id="inspect-pubkey">(e, n)</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Comparison Table -->
+          <table class="wb-table mono mt-10">
+            <thead>
+              <tr>
+                <th>STEP</th>
+                <th>MATHEMATICAL OPERATION</th>
+                <th>EVALUATED INTEGER</th>
+                <th>MATCH STATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-param">Recomputed Hash</td>
+                <td class="col-formula">H_new = SHA256(M_received) mod n</td>
+                <td class="col-val" id="cmp-h-new">...</td>
+                <td rowspan="2" class="col-match" id="cmp-match-cell">EQUAL (H_new == H')</td>
+              </tr>
+              <tr>
+                <td class="col-param">Decrypted Signature</td>
+                <td class="col-formula">H' = (S^e) mod n [Public Key Decrypt]</td>
+                <td class="col-val" id="cmp-h-prime">...</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

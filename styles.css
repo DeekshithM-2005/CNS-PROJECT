@@ -1,0 +1,608 @@
+/* ==========================================================================
+   SWISS ENGINEERING WORKBENCH // RFC-4880 / RFC-8551 UTILITY
+   Utilitarian Desktop Network Security Inspection Tool Design System
+   Pure High-Density CSS: Zero gradients, zero emojis, zero shadows/blurs/glows.
+   ========================================================================== */
+
+:root {
+  /* Utilitarian Paper & Ink Palette */
+  --wb-canvas: #F4F4F0;
+  --wb-surface: #FFFFFF;
+  --wb-recessed: #EBEBE6;
+  --wb-border: #CCCCCC;
+  --wb-border-dark: #111111;
+
+  --wb-ink: #111111;
+  --wb-muted: #555555;
+  --wb-light-muted: #777777;
+
+  /* Button Actions */
+  --wb-btn-primary: #111111;
+  --wb-btn-primary-hover: #333333;
+  --wb-btn-subtle: #FFFFFF;
+  --wb-btn-subtle-hover: #EBEBE6;
+
+  /* Strict Semantic Status */
+  --status-valid-bg: #E6F4EA;
+  --status-valid-text: #146C2E;
+  --status-valid-border: #146C2E;
+
+  --status-invalid-bg: #FCE8E6;
+  --status-invalid-text: #B3261E;
+  --status-invalid-border: #B3261E;
+
+  /* Monospace & Grotesque Typography */
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', 'IBM Plex Mono', Menlo, Courier, monospace;
+
+  /* Strict Zero Radii */
+  --radius-strict: 0px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--wb-canvas);
+  color: var(--wb-ink);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Uppercase Micro-labels */
+.micro-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wb-muted);
+  margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   Header Bar
+   ========================================================================== */
+
+.workbench-header {
+  background: var(--wb-surface);
+  border-bottom: 1px solid var(--wb-border-dark);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.header-title {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--wb-ink);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.control-unit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-unit .micro-label {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   High-Density 2-Column Split-Pane Grid
+   ========================================================================== */
+
+.workbench-grid {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  min-height: calc(100vh - 54px);
+}
+
+@media (max-width: 1060px) {
+  .workbench-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.pane-left {
+  background: var(--wb-canvas);
+  border-right: 1px solid var(--wb-border);
+}
+
+.pane-right {
+  background: var(--wb-surface);
+}
+
+/* Section Blocks */
+.section-block {
+  border-bottom: 1px solid var(--wb-border);
+}
+
+.section-header {
+  background: var(--wb-recessed);
+  border-bottom: 1px solid var(--wb-border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--wb-ink);
+}
+
+.section-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--wb-muted);
+}
+
+.section-content {
+  padding: 12px 14px;
+  background: var(--wb-surface);
+}
+
+.section-content.no-padding {
+  padding: 0;
+}
+
+.status-indicator {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 6px;
+  background: var(--status-valid-bg);
+  color: var(--status-valid-text);
+  border: 1px solid var(--status-valid-border);
+  border-radius: var(--radius-strict);
+}
+
+.status-indicator.invalid {
+  background: var(--status-invalid-bg);
+  color: var(--status-invalid-text);
+  border-color: var(--status-invalid-border);
+}
+
+/* ==========================================================================
+   Form Controls (Strict 0px Radii, Flat Hairline Borders)
+   ========================================================================== */
+
+.form-unit {
+  display: flex;
+  flex-direction: column;
+}
+
+.wb-input,
+.wb-select,
+.wb-textarea {
+  background: var(--wb-surface);
+  border: 1px solid var(--wb-border);
+  border-radius: var(--radius-strict);
+  color: var(--wb-ink);
+  font-size: 12px;
+  padding: 6px 8px;
+  outline: none;
+  width: 100%;
+}
+
+.wb-input:focus,
+.wb-select:focus,
+.wb-textarea:focus {
+  border-color: var(--wb-border-dark);
+}
+
+.wb-textarea {
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.wb-select {
+  cursor: pointer;
+}
+
+.validation-note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--status-valid-text);
+  margin-top: 3px;
+}
+
+.validation-note.invalid {
+  color: var(--status-invalid-text);
+}
+
+.input-row-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.form-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.label-split {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.label-split .micro-label {
+  margin-bottom: 0;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: #0044CC;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link-btn:hover {
+  color: #002277;
+}
+
+.helper-text {
+  font-size: 11px;
+  color: var(--wb-muted);
+}
+
+/* Buttons */
+.wb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: var(--radius-strict);
+  border: 1px solid var(--wb-border-dark);
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--wb-btn-primary);
+  color: #FFFFFF;
+}
+
+.wb-btn:hover {
+  background: var(--wb-btn-primary-hover);
+}
+
+.wb-btn-primary {
+  width: 100%;
+  padding: 8px 14px;
+  background: #111111;
+  border-color: #111111;
+  font-size: 11.5px;
+}
+
+.wb-btn-subtle {
+  background: var(--wb-btn-subtle);
+  color: var(--wb-ink);
+  border: 1px solid var(--wb-border);
+}
+
+.wb-btn-subtle:hover {
+  background: var(--wb-btn-subtle-hover);
+  border-color: var(--wb-border-dark);
+}
+
+.wb-btn-danger {
+  background: #FFFFFF;
+  color: var(--status-invalid-text);
+  border: 1px solid var(--status-invalid-border);
+}
+
+.wb-btn-danger:hover {
+  background: var(--status-invalid-bg);
+}
+
+.actions-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   Bordered Tables & Specifications
+   ========================================================================== */
+
+.wb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  border: 1px solid var(--wb-border);
+}
+
+.wb-table th {
+  background: var(--wb-recessed);
+  border-bottom: 1px solid var(--wb-border);
+  border-right: 1px solid var(--wb-border);
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--wb-muted);
+}
+
+.wb-table th:last-child {
+  border-right: none;
+}
+
+.wb-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--wb-border);
+  border-right: 1px solid var(--wb-border);
+  color: var(--wb-ink);
+}
+
+.wb-table tr:last-child td {
+  border-bottom: none;
+}
+
+.wb-table td:last-child {
+  border-right: none;
+}
+
+.col-param {
+  font-weight: 600;
+  width: 25%;
+}
+
+.col-formula {
+  color: var(--wb-muted);
+  width: 40%;
+}
+
+.col-val {
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.highlight-val {
+  background: #FFF9E6;
+}
+
+.col-match {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 700;
+  background: var(--status-valid-bg);
+  color: var(--status-valid-text);
+  border-left: 1px solid var(--wb-border);
+}
+
+.col-match.mismatch {
+  background: var(--status-invalid-bg);
+  color: var(--status-invalid-text);
+}
+
+/* ==========================================================================
+   Section 03: Pipeline 3-Column Spec Grid
+   ========================================================================== */
+
+.pipeline-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--wb-border);
+}
+
+@media (max-width: 900px) {
+  .pipeline-spec-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.spec-cell {
+  padding: 12px 14px;
+  border-right: 1px solid var(--wb-border);
+  background: var(--wb-surface);
+}
+
+.spec-cell:last-child {
+  border-right: none;
+}
+
+.spec-label {
+  font-size: 11px;
+  color: var(--wb-muted);
+  margin-bottom: 5px;
+}
+
+.spec-val-box,
+.spec-formula-box {
+  background: var(--wb-recessed);
+  border: 1px solid var(--wb-border);
+  padding: 6px 8px;
+  font-size: 11.5px;
+  word-break: break-all;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.spec-val-box.highlight-box {
+  font-weight: 700;
+  background: #FAF8F2;
+  border-color: #AAAAAA;
+}
+
+.spec-sub {
+  font-size: 11px;
+  color: var(--wb-muted);
+}
+
+.spec-sub strong {
+  color: var(--wb-ink);
+}
+
+/* ==========================================================================
+   Section 04: Raw Signed Payload Tabs & Output Block
+   ========================================================================== */
+
+.header-with-tabs {
+  padding: 0 14px;
+}
+
+.tab-group {
+  display: flex;
+  align-items: stretch;
+}
+
+.tab-item {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-right: 1px solid var(--wb-border);
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--wb-muted);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.tab-item:first-child {
+  border-left: 1px solid var(--wb-border);
+}
+
+.tab-item:hover {
+  background: #E4E4DE;
+  color: var(--wb-ink);
+}
+
+.tab-item.active {
+  background: var(--wb-surface);
+  color: var(--wb-ink);
+  border-bottom-color: var(--wb-border-dark);
+}
+
+.tab-actions {
+  display: flex;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.code-container {
+  background: #FDFDFB;
+  padding: 12px 14px;
+}
+
+.wb-code-block {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--wb-ink);
+  background: var(--wb-recessed);
+  border: 1px solid var(--wb-border);
+  border-radius: var(--radius-strict);
+  padding: 12px;
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   Section 05: Receiver Verification & Tamper Inspector
+   ========================================================================== */
+
+.header-tools {
+  display: flex;
+  gap: 6px;
+}
+
+.rect-status-bar {
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  border-radius: var(--radius-strict);
+}
+
+.rect-status-bar.status-valid {
+  background: var(--status-valid-bg);
+  color: var(--status-valid-text);
+  border: 1px solid var(--status-valid-border);
+}
+
+.rect-status-bar.status-invalid {
+  background: var(--status-invalid-bg);
+  color: var(--status-invalid-text);
+  border: 1px solid var(--status-invalid-border);
+}
+
+.notice-bar {
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-strict);
+}
+
+.notice-bar.error-notice {
+  background: var(--status-invalid-bg);
+  color: var(--status-invalid-text);
+  border-color: var(--status-invalid-border);
+}
+
+.hidden {
+  display: none;
+}
+
+/* Spacing Helpers */
+.mt-4 { margin-top: 4px; }
+.mt-6 { margin-top: 6px; }
+.mt-8 { margin-top: 8px; }
+.mt-10 { margin-top: 10px; }
